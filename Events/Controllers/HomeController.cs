@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Events.Models;
+using Events.Data;
 
 namespace Events.Controllers
 {
@@ -15,6 +16,11 @@ namespace Events.Controllers
         //{
         //    return Content($"czesć jestem {name} mam {age} lat.");
         //}
+        EventsContext context;
+        public HomeController(EventsContext context)
+        {
+            this.context = context;
+        }
         public IActionResult Index()
         {
             ViewBag.Message = "Roman";
@@ -32,8 +38,14 @@ namespace Events.Controllers
         [HttpPost]
         public IActionResult Create(User user)
         {
-            UserRepository.AddUser(user);
-            return View("Roman", user);
+            user.Created = DateTime.Now;
+            context.Users.Add(user);
+            context.SaveChanges();
+            return View("Roman", context.Users);
+        }
+        public IActionResult Roman()
+        {
+            return View(context.Users);
         }
     }
 }

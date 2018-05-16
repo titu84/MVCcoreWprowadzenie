@@ -1,7 +1,42 @@
-﻿@model User
+﻿@model IEnumerable<User>
 @{
     ViewData["Title"] = "Roman";
 }
 
 <h1>Hi Roman!!!</h1>
-<h2>Ohhhhh No!!!!! I'm @Model.Name !!!</h2>
+@if (Model != null && Model.Count() > 0)
+{
+    <h2>Ohhhhh No!!!!! I'm @Model.LastOrDefault().Name !!!</h2>
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Phone)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.Phone
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
